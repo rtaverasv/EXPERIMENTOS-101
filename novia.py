@@ -66,19 +66,40 @@ estructura_html = """
 logica_js = """
 <script>
     const botonNo = document.getElementById('botonNo');
-    // En móviles, el botón NO debe moverse dentro del espacio visible real
+    const seccionPropuesta = document.getElementById('seccionPropuesta');
+    const contenedorVictoria = document.getElementById('contenedorVictoria');
+    const musica = document.getElementById('musicaGatito');
+
+    // Función para intentar reproducir la música con un "intento" repetido
+    function intentarReproducirMusica() {
+        musica.play().then(() => {
+            console.log("Música iniciada correctamente");
+        }).catch(error => {
+            console.log("Esperando interacción del usuario para reproducir música");
+        });
+    }
+
+    // Escuchamos cualquier clic en el cuerpo de la página para activar la música
+    document.body.addEventListener('click', function() {
+        intentarReproducirMusica();
+    }, { once: true }); // { once: true } asegura que solo lo haga una vez
+
+    // Movimiento evasivo del botón NO
     botonNo.addEventListener('mouseover', function() {
+        // Al intentar interactuar con el botón, también activamos la música
+        intentarReproducirMusica();
+        
         const maxX = window.innerWidth - this.clientWidth - 20;
         const maxY = window.innerHeight - this.clientHeight - 20;
         this.style.position = 'fixed';
         this.style.left = Math.random() * maxX + 'px';
         this.style.top = Math.random() * maxY + 'px';
     });
+
     function declaracionExitosa() {
-        document.getElementById('seccionPropuesta').style.display = 'none';
-        document.getElementById('contenedorVictoria').style.display = 'block';
+        intentarReproducirMusica(); // Aseguramos que suene al aceptar
+        seccionPropuesta.style.display = 'none';
+        contenedorVictoria.style.display = 'block';
+        alert('¡SÍII! 😻🎉 ¡Oficialmente Novios!');
     }
 </script>
-"""
-
-components.html(estilos_css + estructura_html + logica_js, height=800)
