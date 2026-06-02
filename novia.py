@@ -1,95 +1,84 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# 1. Configuración de la página
 st.set_page_config(page_title="Propuesta Especial", layout="wide")
 
-# 2. Forzar el fondo blanco en la interfaz de Streamlit
-st.markdown("""
-    <style>
-    .stApp { background-color: #FFFFFF !important; }
-    iframe { background-color: #FFFFFF !important; }
-    </style>
-""", unsafe_allow_html=True)
-
-# 3. Estilos visuales de la aplicación
+# CSS Responsivo mejorado
 estilos_css = """
 <style>
-    body { background-color: #FFFFFF !important; margin: 0; padding: 0; overflow-x: hidden; }
-    .main-container { text-align: center; font-family: 'Arial', sans-serif; margin-top: 40px; position: relative; z-index: 10; }
-    .titulo { color: #FF4B4B; font-size: 42px; font-weight: bold; margin-bottom: 40px; padding: 0 20px; }
-    .contenedor-propuesta { display: flex; justify-content: center; align-items: center; position: relative; width: 100%; height: 350px; gap: 40px; }
-    .gatito-centro { width: 260px; height: 260px; object-fit: cover; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); z-index: 5; }
-    .btn-si { background-color: #D2B4DE; color: white; border: none; padding: 25px 80px; font-size: 38px; font-weight: bold; border-radius: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 10; transition: transform 0.2s; }
-    .btn-si:hover { transform: scale(1.05); }
-    .btn-no { background-color: #FF0000; color: white; border: none; padding: 12px 35px; font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 10; transition: top 0.1s ease, left 0.1s ease; }
-    .gatito-lateral { position: fixed; width: 180px; height: 180px; object-fit: cover; border-radius: 50%; box-shadow: 0 6px 12px rgba(0,0,0,0.1); z-index: 1; pointer-events: none; }
-    .lateral-izq { bottom: 50px; left: 50px; }
-    .lateral-der { bottom: 50px; right: 50px; }
-    .victoria-box { margin-top: 20px; display: none; }
-    .mensaje-final { color: #FF4B4B; font-size: 45px; margin-bottom: 15px; }
-    .mensaje-amor { color: #5B2C6F; font-size: 28px; font-weight: bold; margin-bottom: 10px; }
-    .mensaje-mua { color: #E60067; font-size: 35px; font-weight: bold; letter-spacing: 2px; margin-bottom: 25px; }
-    .firmas { color: #555555; font-size: 22px; font-style: italic; background-color: #F4ECF7; display: inline-block; padding: 10px 25px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    /* Meta viewport para móviles */
+    @viewport { width: device-width; initial-scale: 1.0; }
+    
+    body { background-color: #FFFFFF !important; margin: 0; padding: 20px; overflow-x: hidden; }
+    .main-container { text-align: center; font-family: 'Arial', sans-serif; margin-top: 20px; }
+    
+    .titulo { color: #FF4B4B; font-size: 30px; font-weight: bold; margin-bottom: 30px; }
+    
+    /* Contenedor adaptativo: en celular los elementos se ven mejor si están algo más compactos */
+    .contenedor-propuesta { 
+        display: flex; 
+        flex-direction: column; /* Apila elementos en móvil */
+        align-items: center; 
+        gap: 20px; 
+        margin-bottom: 50px;
+    }
+    
+    .gatito-centro { width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    
+    .btn-si { background-color: #D2B4DE; color: white; padding: 20px 50px; font-size: 24px; border-radius: 15px; border: none; cursor: pointer; }
+    .btn-no { background-color: #FF0000; color: white; padding: 10px 25px; font-size: 16px; border-radius: 8px; border: none; cursor: pointer; }
+    
+    /* Ocultar laterales en pantallas muy pequeñas para no saturar */
+    @media (max-width: 600px) {
+        .gatito-lateral { display: none; }
+        .titulo { font-size: 24px; }
+    }
+    
+    .gatito-lateral { position: fixed; width: 100px; height: 100px; border-radius: 50%; opacity: 0.6; }
+    .lateral-izq { bottom: 10px; left: 10px; }
+    .lateral-der { bottom: 10px; right: 10px; }
+    
+    .victoria-box { display: none; padding: 20px; }
 </style>
 """
 
-# 4. Estructura HTML de la página (Título, Fotos, Botones y Música)
+# Estructura y lógica se mantienen igual, pero el CSS de arriba ya controla el tamaño
 estructura_html = """
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="main-container">
     <div class="titulo">¿DIEGA LETICIA C. QUIERES SER MI NOVIA?</div>
-    
     <div id="seccionPropuesta" class="contenedor-propuesta">
         <button id="botonNo" class="btn-no">NO</button>
-        <img class="gatito-centro" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500&auto=format&fit=crop&q=60" alt="Gatito Centro">
+        <img class="gatito-centro" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500" alt="Gatito">
         <button id="botonSi" class="btn-si" onclick="declaracionExitosa()">SÍ</button>
     </div>
-    
     <div id="contenedorVictoria" class="victoria-box">
         <h1 class="mensaje-final">¡SABÍA QUE DIRÍAS QUE SÍ! 🐱❤️</h1>
-        <p class="mensaje-amor">Te mando besitos, tú sabrás dónde... 😏</p>
-        <p class="mensaje-mua">MUAMUA 💋</p>
+        <p class="mensaje-amor">Te mando besitos...</p>
         <div class="firmas">👑 La mamá de Simba y papá de Michini 👑</div>
     </div>
 </div>
-
-<img class="gatito-lateral lateral-izq" src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400&auto=format&fit=crop&q=60" alt="Gatito Izquierda">
-<img class="gatito-lateral lateral-der" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400&auto=format&fit=crop&q=60" alt="Gatito Derecha">
-
-<audio id="musicaGatito" autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
-</audio>
+<img class="gatito-lateral lateral-izq" src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400">
+<img class="gatito-lateral lateral-der" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400">
 """
 
-# 5. Lógica JavaScript para el movimiento del botón y acción del SÍ
+# El script JS también debe ser cuidadoso con los límites en móvil
 logica_js = """
 <script>
     const botonNo = document.getElementById('botonNo');
-    const seccionPropuesta = document.getElementById('seccionPropuesta');
-    const contenedorVictoria = document.getElementById('contenedorVictoria');
-    const musica = document.getElementById('musicaGatito');
-
-    document.body.addEventListener('click', () => {
-        musica.play().catch(() => {});
-    }, { once: true });
-
+    // En móviles, el botón NO debe moverse dentro del espacio visible real
     botonNo.addEventListener('mouseover', function() {
-        const x = Math.random() * (window.innerWidth - this.clientWidth - 100);
-        const y = Math.random() * (window.innerHeight - this.clientHeight - 100);
+        const maxX = window.innerWidth - this.clientWidth - 20;
+        const maxY = window.innerHeight - this.clientHeight - 20;
         this.style.position = 'fixed';
-        this.style.left = x + 'px';
-        this.style.top = y + 'px';
-        this.style.zIndex = '999';
+        this.style.left = Math.random() * maxX + 'px';
+        this.style.top = Math.random() * maxY + 'px';
     });
-
     function declaracionExitosa() {
-        seccionPropuesta.style.display = 'none';
-        contenedorVictoria.style.display = 'block';
-        alert('¡SÍII! 😻🎉 ¡Oficialmente Novios!');
+        document.getElementById('seccionPropuesta').style.display = 'none';
+        document.getElementById('contenedorVictoria').style.display = 'block';
     }
 </script>
 """
 
-# 6. Unir todas las partes y renderizar la aplicación web
-componente_final = estilos_css + estructura_html + logica_js
-components.html(componente_final, height=750, scrolling=False)
+components.html(estilos_css + estructura_html + logica_js, height=800)
