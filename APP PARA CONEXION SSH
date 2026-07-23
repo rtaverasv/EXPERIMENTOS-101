@@ -1,0 +1,217 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyN25TtmPmPquRNBPp+ed2Rg",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/rtaverasv/EXPERIMENTOS-101/blob/main/APP%20PARA%20CONEXION%20SSH\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install netmiko colorama"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "JeOhf_RENZg9",
+        "outputId": "1a521a2b-9ed5-441d-a634-e7e37ef4d691"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting netmiko\n",
+            "  Downloading netmiko-4.7.0-py3-none-any.whl.metadata (8.3 kB)\n",
+            "Collecting colorama\n",
+            "  Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)\n",
+            "Collecting ntc-templates>=3.1.0 (from netmiko)\n",
+            "  Downloading ntc_templates-9.2.0-py3-none-any.whl.metadata (4.2 kB)\n",
+            "Collecting paramiko<5.0,>=3.5.0 (from netmiko)\n",
+            "  Downloading paramiko-4.0.0-py3-none-any.whl.metadata (3.9 kB)\n",
+            "Collecting pyserial>=3.3 (from netmiko)\n",
+            "  Downloading pyserial-3.5-py2.py3-none-any.whl.metadata (1.6 kB)\n",
+            "Requirement already satisfied: pyyaml>=6.0.2 in /usr/local/lib/python3.12/dist-packages (from netmiko) (6.0.3)\n",
+            "Requirement already satisfied: rich>=13.8 in /usr/local/lib/python3.12/dist-packages (from netmiko) (13.9.4)\n",
+            "Collecting ruamel.yaml>=0.17 (from netmiko)\n",
+            "  Downloading ruamel_yaml-0.19.1-py3-none-any.whl.metadata (16 kB)\n",
+            "Collecting scp>=0.13.6 (from netmiko)\n",
+            "  Downloading scp-0.16.0-py2.py3-none-any.whl.metadata (4.6 kB)\n",
+            "Collecting textfsm>=1.1.3 (from netmiko)\n",
+            "  Downloading textfsm-2.1.0-py2.py3-none-any.whl.metadata (2.7 kB)\n",
+            "Collecting bcrypt>=3.2 (from paramiko<5.0,>=3.5.0->netmiko)\n",
+            "  Downloading bcrypt-5.0.0-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (10 kB)\n",
+            "Requirement already satisfied: cryptography>=3.3 in /usr/local/lib/python3.12/dist-packages (from paramiko<5.0,>=3.5.0->netmiko) (49.0.0)\n",
+            "Collecting invoke>=2.0 (from paramiko<5.0,>=3.5.0->netmiko)\n",
+            "  Downloading invoke-3.0.3-py3-none-any.whl.metadata (3.2 kB)\n",
+            "Collecting pynacl>=1.5 (from paramiko<5.0,>=3.5.0->netmiko)\n",
+            "  Downloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (10.0 kB)\n",
+            "Requirement already satisfied: markdown-it-py>=2.2.0 in /usr/local/lib/python3.12/dist-packages (from rich>=13.8->netmiko) (4.2.0)\n",
+            "Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /usr/local/lib/python3.12/dist-packages (from rich>=13.8->netmiko) (2.20.0)\n",
+            "Requirement already satisfied: cffi>=2.0.0 in /usr/local/lib/python3.12/dist-packages (from cryptography>=3.3->paramiko<5.0,>=3.5.0->netmiko) (2.1.0)\n",
+            "Requirement already satisfied: mdurl~=0.1 in /usr/local/lib/python3.12/dist-packages (from markdown-it-py>=2.2.0->rich>=13.8->netmiko) (0.1.2)\n",
+            "Requirement already satisfied: pycparser in /usr/local/lib/python3.12/dist-packages (from cffi>=2.0.0->cryptography>=3.3->paramiko<5.0,>=3.5.0->netmiko) (3.0)\n",
+            "Downloading netmiko-4.7.0-py3-none-any.whl (294 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m294.3/294.3 kB\u001b[0m \u001b[31m2.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)\n",
+            "Downloading ntc_templates-9.2.0-py3-none-any.whl (649 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m649.8/649.8 kB\u001b[0m \u001b[31m7.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading paramiko-4.0.0-py3-none-any.whl (223 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m223.9/223.9 kB\u001b[0m \u001b[31m18.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pyserial-3.5-py2.py3-none-any.whl (90 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m90.6/90.6 kB\u001b[0m \u001b[31m6.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading ruamel_yaml-0.19.1-py3-none-any.whl (118 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m118.1/118.1 kB\u001b[0m \u001b[31m8.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading scp-0.16.0-py2.py3-none-any.whl (8.9 kB)\n",
+            "Downloading textfsm-2.1.0-py2.py3-none-any.whl (44 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m44.3/44.3 kB\u001b[0m \u001b[31m3.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading bcrypt-5.0.0-cp39-abi3-manylinux_2_34_x86_64.whl (278 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m278.2/278.2 kB\u001b[0m \u001b[31m17.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading invoke-3.0.3-py3-none-any.whl (160 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m161.0/161.0 kB\u001b[0m \u001b[31m11.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl (1.4 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.4/1.4 MB\u001b[0m \u001b[31m17.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: textfsm, pyserial, ruamel.yaml, ntc-templates, invoke, colorama, bcrypt, pynacl, paramiko, scp, netmiko\n",
+            "Successfully installed bcrypt-5.0.0 colorama-0.4.6 invoke-3.0.3 netmiko-4.7.0 ntc-templates-9.2.0 paramiko-4.0.0 pynacl-1.6.2 pyserial-3.5 ruamel.yaml-0.19.1 scp-0.16.0 textfsm-2.1.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from netmiko import ConnectHandler\n",
+        "import sys\n",
+        "from colorama import init, Fore, Style\n",
+        "\n",
+        "# Inicializamos colorama para que autorestablesca el color al final de cada impresión\n",
+        "init(autoreset=True)\n",
+        "\n",
+        "# 1. Definimos las credenciales de ambos equipos\n",
+        "router_0 = {\n",
+        "    'device_type': 'cisco_ios',\n",
+        "    'host': '192.168.0.1',\n",
+        "    'username': 'admin',\n",
+        "    'password': 'admin123',\n",
+        "}\n",
+        "\n",
+        "switch_0 = {\n",
+        "    'device_type': 'cisco_ios',\n",
+        "    'host': '192.168.0.2',\n",
+        "    'username': 'admin',\n",
+        "    'password': 'admin123',\n",
+        "}\n",
+        "\n",
+        "# 2. Primera pregunta: ¿Desea conectarse?\n",
+        "print(Fore.MAGENTA + Style.BRIGHT + \"\\n=== Asistente de Conexión de Red ===\")\n",
+        "\n",
+        "# Separamos el print del input para evitar los caracteres raros en Colab\n",
+        "print(Fore.CYAN + \"¿Deseas conectarte por SSH? (Si/No): \")\n",
+        "respuesta_ssh = input(\"> \").strip().lower()\n",
+        "\n",
+        "if respuesta_ssh in ['si', 's']:\n",
+        "\n",
+        "    # 3. Segunda pregunta: ¿A cuál equipo?\n",
+        "    print(Fore.CYAN + \"¿A qué dispositivo deseas conectarte? (Router / Switch): \")\n",
+        "    respuesta_equipo = input(\"> \").strip().lower()\n",
+        "\n",
+        "    equipo_seleccionado = None\n",
+        "    nombre_equipo = \"\"\n",
+        "\n",
+        "    if respuesta_equipo == 'router':\n",
+        "        equipo_seleccionado = router_0\n",
+        "        nombre_equipo = \"Router0\"\n",
+        "    elif respuesta_equipo == 'switch':\n",
+        "        equipo_seleccionado = switch_0\n",
+        "        nombre_equipo = \"Switch0\"\n",
+        "    else:\n",
+        "        print(Fore.YELLOW + \"Opción no válida. Debes escribir 'Router' o 'Switch'.\")\n",
+        "        sys.exit()\n",
+        "\n",
+        "    # 4. Ejecución de la conexión\n",
+        "    try:\n",
+        "        print(Fore.BLUE + f\"\\nIniciando conexión SSH con {nombre_equipo} ({equipo_seleccionado['host']})...\")\n",
+        "        conexion = ConnectHandler(**equipo_seleccionado)\n",
+        "\n",
+        "        print(Fore.GREEN + Style.BRIGHT + \"¡Conexión exitosa!\")\n",
+        "\n",
+        "        salida = conexion.send_command(\"show ip interface brief\")\n",
+        "        print(Fore.MAGENTA + f\"\\n--- Resultados de {nombre_equipo} ---\")\n",
+        "\n",
+        "        print(salida)\n",
+        "\n",
+        "        conexion.disconnect()\n",
+        "        print(Fore.GREEN + \"\\nConexión cerrada correctamente.\")\n",
+        "\n",
+        "    except Exception as e:\n",
+        "        print(Fore.YELLOW + Style.BRIGHT + f\"\\nError al conectar con {nombre_equipo}. Verifica que la IP sea alcanzable o que el equipo esté encendido.\")\n",
+        "        print(Fore.YELLOW + f\"Detalle técnico: {e}\")\n",
+        "\n",
+        "elif respuesta_ssh in ['no', 'n']:\n",
+        "    print(Fore.BLUE + \"Entendido. Operación cancelada, no se realizará ninguna conexión.\")\n",
+        "\n",
+        "else:\n",
+        "    print(Fore.YELLOW + \"Respuesta no reconocida. Por favor, ejecuta el script nuevamente y responde 'Si' o 'No'.\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "c8Nm_8-xRr4u",
+        "outputId": "38cbfd62-a296-4669-ce52-347c6f3e9d36"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "=== Asistente de Conexión de Red ===\n",
+            "¿Deseas conectarte por SSH? (Si/No): \n",
+            "> si\n",
+            "¿A qué dispositivo deseas conectarte? (Router / Switch): \n",
+            "> router\n",
+            "\n",
+            "Iniciando conexión SSH con Router0 (192.168.0.1)...\n",
+            "\n",
+            "Error al conectar con Router0. Verifica que la IP sea alcanzable o que el equipo esté encendido.\n",
+            "Detalle técnico: TCP connection to device failed.\n",
+            "\n",
+            "Common causes of this problem are:\n",
+            "1. Incorrect hostname or IP address.\n",
+            "2. Wrong TCP port.\n",
+            "3. Intermediate firewall blocking access.\n",
+            "\n",
+            "Device settings: cisco_ios 192.168.0.1:22\n",
+            "\n",
+            "\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
